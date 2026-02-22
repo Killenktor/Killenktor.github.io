@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maksym Kovalenko — Research & Investment Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161d;
+    --surface2: #1a1e28;
+    --border: #232736;
+    --accent: #c8a96e;
+    --accent2: #7b9ccc;
+    --text: #e2e4ea;
+    --muted: #7a7f91;
+    --dim: #3d4255;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(13, 15, 20, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 140px 0 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 62px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-desc {
+    max-width: 580px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 40px;
+  }
+
+  .hero-desc strong { color: var(--text); font-weight: 500; }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .stat-item {}
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--accent);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+
+  .hero-contacts {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* ── WHAT I DO ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--surface);
+    padding: 28px;
+    transition: background 0.2s;
+  }
+
+  .service-card:hover { background: var(--surface2); }
+
+  .service-icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .service-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .service-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── RESEARCH CARDS ── */
+  .research-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .research-card {
+    background: var(--surface);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+
+  .research-card:hover { background: var(--surface2); }
+
+  .research-card-inner {
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .research-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .tag-sector {
+    background: rgba(200, 169, 110, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(200, 169, 110, 0.25);
+  }
+
+  .tag-role {
+    background: rgba(123, 156, 204, 0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(123, 156, 204, 0.2);
+  }
+
+  .tag-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .research-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .research-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 560px;
+  }
+
+  .research-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+
+  .research-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .research-link svg { width: 12px; height: 12px; }
+
+  /* ── ARTICLES ── */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .article-card {
+    background: var(--surface);
+    padding: 22px 24px;
+    transition: background 0.2s;
+  }
+
+  .article-card:hover { background: var(--surface2); }
+
+  .article-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+
+  .article-title {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .article-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    transition: color 0.2s;
+  }
+
+  .article-link:hover { color: var(--accent); }
+
+  /* ── PRODUCT CONSULTING ── */
+  .consulting-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .consulting-card {
+    background: var(--surface);
+    padding: 24px 26px;
+  }
+
+  .consulting-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .consulting-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .consulting-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .consulting-link:hover { color: var(--accent); }
+
+  /* ── AVAILABILITY ── */
+  .availability {
+    padding: 72px 0 80px;
+  }
+
+  .avail-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avail-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .avail-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .avail-desc {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 480px;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  .avail-contacts {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .avail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .avail-btn-primary {
+    background: var(--accent);
+    color: #0d0f14;
+  }
+
+  .avail-btn-primary:hover { background: #d4b87a; }
+
+  .avail-btn-secondary {
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .avail-btn-secondary:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── CURRENTLY TRACKING ── */
+  .tracking-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .track-pill {
+    padding: 6px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero > * { animation: fadeUp 0.6s ease both; }
+  .hero > *:nth-child(1) { animation-delay: 0.05s; }
+  .hero > *:nth-child(2) { animation-delay: 0.12s; }
+  .hero > *:nth-child(3) { animation-delay: 0.20s; }
+  .hero > *:nth-child(4) { animation-delay: 0.28s; }
+  .hero > *:nth-child(5) { animation-delay: 0.36s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .services-grid,
+    .articles-grid,
+    .consulting-grid { grid-template-columns: 1fr; }
+
+    .hero-stats { gap: 24px; }
+    .research-card-inner { grid-template-columns: 1fr; }
+    .avail-inner { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">KILENKTOR</a>
+    <ul class="nav-links">
+      <li><a href="#research">Research</a></li>
+      <li><a href="#articles">Articles</a></li>
+      <li><a href="#consulting">Consulting</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="container">
+  <div class="hero">
+    <div class="hero-tag">Research & Investment Analysis</div>
+    <h1>Maksym<br>Kovalenko<em>.</em></h1>
+    <p class="hero-desc">
+      <strong>Institutional-grade research and content</strong> at the intersection of Web3, macro, and emerging market equities. My focus is on-chain protocol analysis, investment due diligence, macroeconomy and <strong>China-MENA cross-market flows</strong> — the kind of work most generalist analysts don't cover.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">80+</div>
+        <div class="stat-label">Institutional artifacts</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">China-MENA deal evaluations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Projects reviewed</div>
+      </div>
+    </div>
+    <div class="hero-contacts">
+      <a href="mailto:kilenktor.maks@gmail.com" class="contact-link">↗ Email</a>
+      <a href="https://t.me/kilenktor" class="contact-link" target="_blank">↗ Telegram</a>
+      <a href="https://www.linkedin.com/in/maksym-kovalenko-killenktor/" class="contact-link" target="_blank">↗ LinkedIn</a>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT I DO -->
+<div class="container">
+  <section>
+    <div class="section-label">What I Do</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">01 / RESEARCH</div>
+        <div class="service-title">Ecosystem & Market Reports</div>
+        <p class="service-desc">Full-stack ecosystem analyses, cross-chain protocol studies, macro-crypto intersection reports. Published for institutional audiences via DARC by Solus Partners.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">02 / INVESTMENT</div>
+        <div class="service-title">Due Diligence & Investment Memos</div>
+        <p class="service-desc">China-MENA focused DD and investment memos across pre-IPO equities, real assets, and cross-border joint ventures. Sector coverage: robotics, semiconductors, real estate, financial infrastructure.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">03 / PRODUCT</div>
+        <div class="service-title">Web3 Product & Fundraising Docs</div>
+        <p class="service-desc">Tokenomics models, whitepapers, pitch decks, GTM strategies, financial projections, and data rooms for early-stage Web3 founders raising from VCs and angels.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">04 / CONTENT</div>
+        <div class="service-title">Analytical Writing & Publications</div>
+        <p class="service-desc">Long-form & short-form analytical articles, posts and monthly market reports covering macro, on-chain data, institutional crypto adoption, and DeFi mechanics — for institutional and crypto-native readers.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px;">
+      <div class="section-label" style="margin-bottom: 16px;">Currently Tracking</div>
+      <div class="tracking-row">
+        <span class="track-pill">TradFi to DeFi capital flows</span>
+        <span class="track-pill">China-MENA equity deals & crypto adoption</span>
+        <span class="track-pill">Robotics & AI</span>
+        <span class="track-pill">Tokenization & RWA</span>
+        <span class="track-pill">DePIN compute economics</span>
+        <span class="track-pill">Liquidity cycles</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- RESEARCH -->
+<div class="container">
+  <section id="research">
+    <div class="section-label">Research & Reports</div>
+    <div class="research-list">
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">DePIN · Compute</span>
+              <span class="tag tag-role">70% authorship</span>
+              <span class="tag-date">Nov 2025</span>
+            </div>
+            <div class="research-title">Computation DePIN</div>
+            <p class="research-desc">Institutional report on decentralized GPU compute networks. Analyzes Aethir, Akash, io.net, Nosana, Render, and Golem across market size, pricing, unit economics, SLAs, and compliance posture. Includes a 6-pillar comparative scoring model and H100 cost-stack economic models. Published via DARC for institutional audiences.</p>
+          </div>
+          <a href="https://solus.partners/computation-depin-november-2025" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">TradFi · DeFi · Macro</span>
+              <span class="tag tag-role">90% authorship</span>
+              <span class="tag-date">Nov 2025</span>
+            </div>
+            <div class="research-title">TradFi to DeFi: Flows, Yields, Transition</div>
+            <p class="research-desc">Maps how institutional capital moves through tokenized Treasuries, stablecoins, private credit, lending, ETFs, and structured DeFi products. Builds a unified yield framework across risk tiers. Includes Syntetika BTC Basis+ as a live institutional BTC yield case study. Published via DARC.</p>
+          </div>
+          <a href="https://solus.partners/TradFi-to-DeFi-november-2025" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">TradFi · DeFi · L1</span>
+              <span class="tag tag-role">100% authorship</span>
+              <span class="tag-date">Feb 2026</span>
+            </div>
+            <div class="research-title">Canton Network 2026</div>
+            <p class="research-desc">Institutional report on Canton Network architecture and GTM as a privacy-enabled, interoperable network for regulated financial workflows. Analyzes how participants can run synchronized applications while keeping sensitive data private. Covers the network model, compliance, full ecosystem mapping, and the role of programmable privacy in multi-institution settlement. Published via DARC.</p>
+          </div>
+          <a href="https://x.com/CantonNetwork/status/2023529573242077314?s=20" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">DeFi · Cross-chain</span>
+              <span class="tag tag-role">60% authorship</span>
+              <span class="tag-date">May 2025</span>
+            </div>
+            <div class="research-title">Revenue-Generating Web3 Apps</div>
+            <p class="research-desc">70-page cross-chain analysis of revenue-generating protocols across Ethereum, Solana, and multichain ecosystems. Evaluates 52 applications across DeFi, NFT infrastructure, staking, and tokenless models. Decomposes monetization models, annualized revenue, and usage patterns.</p>
+          </div>
+          <a href="https://solus.partners/Revenue-Generating-Apps-with-Simplicity-Group" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">BTCFi · Synthetics</span>
+              <span class="tag tag-role">90% authorship</span>
+              <span class="tag-date">Oct 2025</span>
+            </div>
+            <div class="research-title">Between Synthetic Assets and BTCFi</div>
+            <p class="research-desc">60+ page report mapping Bitcoin's transition from store-of-value to productive collateral. Covers synthetic-asset design patterns, peg mechanisms, collateral-velocity metrics, and full BTCFi stack (custody, wrapping, yield sources). Compares leading BTCFi projects across risk/return bands and TVL.</p>
+          </div>
+          <a href="https://solus.partners/Between-Synthetic-Assets-and-BTCFi" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">Ecosystem · L2</span>
+              <span class="tag tag-role">Lead author</span>
+              <span class="tag-date">Oct 2025</span>
+            </div>
+            <div class="research-title">State of the Camp Network</div>
+            <p class="research-desc">Full-stack ecosystem mapping: testnet metrics, technical architecture, dApp landscape, and community. Full data sourcing from explorer, project docs, and on-chain activity.</p>
+          </div>
+          <a href="https://solus.partners/State-of-the-Camp-Network-October-2025" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">Ecosystem · L1</span>
+              <span class="tag tag-role">80% authorship</span>
+              <span class="tag-date">May 2025</span>
+            </div>
+            <div class="research-title">State of the Sonic Ecosystem</div>
+            <p class="research-desc">Full-stack mapping of Sonic Network: SonicVM performance, Fee Monetization efficiency, token incentive structures, and on-chain adoption metrics. Includes Sonic vs EVM/SVM chain comparisons and dApp revenue benchmarks across 160+ apps.</p>
+          </div>
+          <a href="https://docsend.com/view/q8pwmbq3tzu88kgk" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">Ecosystem · L2</span>
+              <span class="tag tag-role">70% authorship</span>
+              <span class="tag-date">May 2025</span>
+            </div>
+            <div class="research-title">State of the MegaETH Ecosystem</div>
+            <p class="research-desc">Full-stack mapping of MegaETH: execution model, testnet metrics, node specification, dApp landscape. Data sourced from DefiLlama, Dune, testnet explorer, and project documentation.</p>
+          </div>
+          <a href="https://docsend.com/v/qs7jn/state-of-the-megaeth-ecosystem-may-2025" target="_blank" class="research-link">
+            Read <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <div class="research-card-inner">
+          <div>
+            <div class="research-meta">
+              <span class="tag tag-sector">Macro · Web3 · Monthly</span>
+              <span class="tag tag-role">Full-cycle production</span>
+              <span class="tag-date">Ongoing</span>
+            </div>
+            <div class="research-title">State of the Market — Monthly Reports</div>
+            <p class="research-desc">Two interlinked monthly reports: Macro edition (rates, CPI, M2, BTC correlation, liquidity indexes, bond spreads) and Web3 edition (fundraising, ETF flows, L1/L2 activity, stablecoin volumes, option positioning). Each closes with scenario-based outlooks. Sole author, data, and design.</p>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <a href="https://x.com/solus_partners/status/1995818160407060690?s=20" target="_blank" class="research-link">Web3 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg></a>
+            <a href="https://docsend.com/view/mxvbfmfp4gt27ads" target="_blank" class="research-link">Macro <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H4M10 2V8"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- ARTICLES -->
+<div class="container">
+  <section id="articles">
+    <div class="section-label">Articles & Publications</div>
+    <div class="articles-grid">
+      <div class="article-card">
+        <div class="article-num">01 / MARKETS</div>
+        <div class="article-title">113 Token Launches. $1.3B+ Raised. One Pattern That Kills All.</div>
+        <a href="https://x.com/solus_group/status/2000942057276289169" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">02 / MACRO</div>
+        <div class="article-title">Japanese Institutional Crypto Adoption in Q1–Q2 2025</div>
+        <a href="https://x.com/solus_partners/status/1925189854695968856" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">03 / MACRO</div>
+        <div class="article-title">Where Banks Meet Crypto: Macro Perspective for Institutional Adoption</div>
+        <a href="https://x.com/solus_partners/status/1915707421365780949" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">04 / MACRO</div>
+        <div class="article-title">Crypto and the 401(k): Fuel for One Market, New Experience for the Other</div>
+        <a href="https://x.com/solus_partners/status/1953701891403104267" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">05 / MACRO</div>
+        <div class="article-title">One Trade War, Many Angles: What Tariffs Really Mean in 2025</div>
+        <a href="https://x.com/solus_partners/status/1910629302783160735" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">06 / INFOFI</div>
+        <div class="article-title">How Cats Know More Than You Think: Bayesian Truth Serum in InfoFi</div>
+        <a href="https://x.com/solus_partners/status/1961066485608005861" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">07 / INFOFI</div>
+        <div class="article-title">Futarchy: Markets That Govern</div>
+        <a href="https://x.com/solus_partners/status/1958529561387221300" target="_blank" class="article-link">↗ Read</a>
+      </div>
+      <div class="article-card">
+        <div class="article-num">08 / MACRO</div>
+        <div class="article-title">Stablecoins' Influence on Global Liquidity and Debt</div>
+        <a href="https://x.com/solus_partners/status/1969023786100965879" target="_blank" class="article-link">↗ Read</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PRODUCT CONSULTING -->
+<div class="container">
+  <section id="consulting">
+    <div class="section-label">Product & Consulting Work</div>
+    <div class="consulting-grid">
+      <div class="consulting-card">
+        <div class="consulting-label">Financial Modeling</div>
+        <p class="consulting-desc">Token emission models, P&L projections, and financial forecasting for early-stage Web3 fundraising rounds.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1Du6J8MRaVRPRjuubhAgFhmFTQWzhW2f6XgOIzs9Qors/edit?usp=sharing" target="_blank" class="consulting-link">↗ View sample model</a>
+      </div>
+      <div class="consulting-card">
+        <div class="consulting-label">Tokenomics Design</div>
+        <p class="consulting-desc">Token supply schedules, vesting structures, incentive mechanisms, and sustainability modeling for protocol design.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1TWKO97bvzRxnRW6F1ZcXebsv6wYM1f7L5SmG2Va-Qes/edit?usp=sharing" target="_blank" class="consulting-link">↗ View sample model</a>
+      </div>
+      <div class="consulting-card">
+        <div class="consulting-label">Pitch Deck Development</div>
+        <p class="consulting-desc">Investor-facing decks for Web3 founders: narrative structure, market sizing, competitive positioning, and visual design.</p>
+        <a href="https://docsend.com/view/c4trt8yy2niqrks6" target="_blank" class="consulting-link">↗ View sample deck</a>
+      </div>
+      <div class="consulting-card">
+        <div class="consulting-label">Whitepaper Authoring</div>
+        <p class="consulting-desc">Technical and product documentation for protocol launches: architecture, tokenomics, governance, and use case framing.</p>
+        <a href="https://docs.google.com/document/d/1NMtVcan71GctPu3g0oax2uyEdzmRKAVfJTHTrmC6-fw/edit?usp=sharing" target="_blank" class="consulting-link">↗ View sample whitepaper</a>
+      </div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div class="container">
+  <div class="availability" id="contact">
+    <div class="avail-inner">
+      <div class="avail-heading">Available for new opportunities</div>
+      <p class="avail-desc">Open to research engagements, due diligence, investment memo production, and content development. Remote only.</p>
+      <div class="avail-contacts">
+        <a href="https://t.me/kilenktor" target="_blank" class="avail-btn avail-btn-primary">Telegram @kilenktor</a>
+        <a href="mailto:kilenktor.maks@gmail.com" class="avail-btn avail-btn-secondary">kilenktor.maks@gmail.com</a>
+        <a href="https://www.linkedin.com/in/maksym-kovalenko-killenktor/" target="_blank" class="avail-btn avail-btn-secondary">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>KILENKTOR · MAKSYM KOVALENKO · UKRAINE</p>
+    <p>RESEARCH & INVESTMENT ANALYSIS</p>
+  </footer>
+</div>
+
+</body>
+</html>
